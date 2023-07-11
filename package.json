@@ -1,0 +1,30 @@
+{
+  "type": "module",
+  "name": "rehype-tree-sitter",
+  "version": "0.0.1",
+  "description": "a rehype plugin to provide syntax highlighting for html code blocks using tree-sitter",
+  "main": "index.js",
+  "scripts": {
+   "test": "node --experimental-vm-modules ./node_modules/.bin/jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haze/rehype-tree-sitter.git"
+  },
+  "keywords": [
+    "tree-sitter",
+    "rehype"
+  ],
+  "author": "Haze Booth <isnt@haze.cool>",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/haze/rehype-tree-sitter/issues"
+  },
+  "homepage": "https://github.com/haze/rehype-tree-sitter#readme",
+  "devDependencies": {
+    "jest": "^29.6.1"
+  },
+  "dependencies": {
+    "rehype": "^12.0.1"
+  }
+}
