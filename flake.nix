@@ -8,6 +8,6 @@
     let pkgs = nixpkgs.legacyPackages.aarch64-darwin;
     in {
       devShell.aarch64-darwin =
-        pkgs.mkShell { buildInputs = [ pkgs.nodejs_20 ]; };
+        pkgs.mkShell { buildInputs = [ pkgs.nodejs_20 pkgs.tree-sitter ]; };
   };
 }
