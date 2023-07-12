@@ -1,4 +1,4 @@
-import { treeSitterHighlight } from './index.js';
+import { rehypeTreeSitter } from './index.js';
 import { rehype } from 'rehype';
 
 test('highlights javascript code', () => {
@@ -7,7 +7,7 @@ test('highlights javascript code', () => {
 <tbody><tr><td class="line-number">1</td><td class="line"><span style="color: #5f00d7">function</span> <span style="color: #005fd7">sum</span><span style="color: #4e4e4e">(</span><span style="text-decoration: underline;">a</span><span style="color: #4e4e4e">,</span> <span style="text-decoration: underline;">b</span><span style="color: #4e4e4e">)</span> <span style="color: #4e4e4e">{</span> <span style="color: #5f00d7">return</span> <span style="text-decoration: underline;">a</span> <span style="font-weight: bold;color: #4e4e4e">+</span> <span style="text-decoration: underline;">b</span><span style="color: #4e4e4e">;</span> <span style="color: #4e4e4e">}</span>
 </td></tr>
 </tbody></table></code></pre></body></html>`
-    const processor = rehype().use(treeSitterHighlight).freeze();
+    const processor = rehype().use(rehypeTreeSitter).freeze();
     const output = processor.processSync(html).value;
     expect(output).toBe(expectedOutput);
 });
