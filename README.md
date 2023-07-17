@@ -66,7 +66,7 @@ Highlight the code within the tree. This works by transforming the text within t
 
 ##### `options`
 
-Configuration (optional).
+Configuration.
 
 ###### `options.treeSitterGrammarRoot`
 
