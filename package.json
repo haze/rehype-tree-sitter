@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "rehype-tree-sitter",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "a rehype plugin to provide syntax highlighting for html code blocks using tree-sitter",
   "exports": "./index.js",
   "scripts": {

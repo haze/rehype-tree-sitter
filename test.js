@@ -1,4 +1,4 @@
-import { rehypeTreeSitter } from "./index.js";
+import rehypeTreeSitter from "./index.js";
 import { rehype } from "rehype";
 
 test("highlights javascript code", () => {

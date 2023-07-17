@@ -1,6 +1,6 @@
 import { visit, SKIP } from "unist-util-visit";
 import { rehype } from "rehype";
-import { createRequire } from "module";
+import { createRequire } from "node:module";
 import { h } from "hastscript";
 const require = createRequire(import.meta.url);
 const core = require("./dist/index.node");
@@ -11,15 +11,8 @@ const exampleScopeMap = {
   "language-xml": "source.xml",
 };
 
-function doesNodeHaveChildTable(node) {
-  for (const child of node.children) {
-    if (child.tagName === "table") return true;
-  }
-  return false;
-}
-
-const isCodeBlockElement = (node) => node.tagName === "code"; //  && node.children.length === 1 && ;
-export function rehypeTreeSitter(options) {
+const isCodeBlockElement = (node) => node.tagName === "code";
+export default function rehypeTreeSitter(options) {
   if (options === undefined)
     throw new Error("Need to provide `options.treeSitterGrammarRoot`");
   if (options.treeSitterGrammarRoot === undefined)
@@ -54,8 +47,6 @@ export function rehypeTreeSitter(options) {
             highlightStack.push(event.highlightStart.highlightName);
           } else if (event === "HighlightEnd") {
             highlightStack.pop();
-          } else {
-            console.log(event);
           }
         }
       );
