@@ -5,7 +5,8 @@
   "description": "a rehype plugin to provide syntax highlighting for html code blocks using tree-sitter",
   "exports": "./index.js",
   "scripts": {
-    "test": "node --experimental-vm-modules ./node_modules/.bin/jest"
+    "test": "node --experimental-vm-modules ./node_modules/.bin/jest",
+    "postinstall": "cargo build --release && mkdir dist && cp target/release/librehype_tree_sitter.dylib dist/index.node"
   },
   "repository": {
     "type": "git",
@@ -25,8 +26,8 @@
     "jest": "^29.6.1"
   },
   "dependencies": {
+    "hastscript": "^7.2.0",
     "rehype": "^12.0.1",
-    "tempy": "^3.1.0",
     "unist-util-visit": "^5.0.0"
   }
 }
