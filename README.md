@@ -104,7 +104,7 @@ audit them to make sure the code is safe to run. Other than that, the plugin is 
 
 [npm]: https://docs.npmjs.com/cli/install
 
-[license]: license
+[license]: LICENSE
 
 [author]: https://haz.ee
 
