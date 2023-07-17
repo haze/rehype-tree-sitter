@@ -112,6 +112,8 @@ audit them to make sure the code is safe to run. Other than that, the plugin is 
 
 [unified]: https://github.com/unifiedjs/unified
 
+[hastscript]: https://github.com/syntax-tree/hastscript
+
 [rehype]: https://github.com/rehypejs/rehype
 
 [hast]: https://github.com/syntax-tree/hast
