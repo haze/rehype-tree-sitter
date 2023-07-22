@@ -6,7 +6,7 @@
   "exports": "./index.js",
   "scripts": {
     "test": "node --experimental-vm-modules ./node_modules/.bin/jest",
-    "postinstall": "cargo build --release && mkdir dist && cp target/release/librehype_tree_sitter.dylib dist/index.node"
+    "postinstall": "cargo build --release && mkdir -p dist && cp target/release/librehype_tree_sitter.dylib dist/index.node"
   },
   "repository": {
     "type": "git",
