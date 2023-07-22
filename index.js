@@ -2,6 +2,7 @@ import { visit, SKIP } from "unist-util-visit";
 import { rehype } from "rehype";
 import { createRequire } from "node:module";
 import { h } from "hastscript";
+import stringByteSlice from "string-byte-slice";
 const require = createRequire(import.meta.url);
 const core = require("./dist/index.node");
 
@@ -22,8 +23,7 @@ export default function rehypeTreeSitter(options) {
       if (Object.keys(node.properties).length === 0) return;
       const code = node.children[0].value;
       const language = node.properties.className[0];
-      if (!(language in exampleScopeMap)) return;
-      // remove the source text
+      if (!(language in (options.scopeMap || exampleScopeMap))) return;
       node.children = [];
       const highlightStack = [];
       core.driver(
@@ -32,7 +32,8 @@ export default function rehypeTreeSitter(options) {
         code,
         (event) => {
           if (event.source !== undefined) {
-            const sourceChunk = code.slice(
+            const sourceChunk = stringByteSlice(
+              code,
               Number(event.source.start),
               Number(event.source.end)
             );
