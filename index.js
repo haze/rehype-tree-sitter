@@ -14,8 +14,7 @@ const exampleScopeMap = {
 
 const isCodeBlockElement = (node) => node.tagName === "code";
 export default function rehypeTreeSitter(options) {
-  if (options === undefined)
-    throw new Error("Need to provide `options.treeSitterGrammarRoot`");
+  if (options === undefined) throw new Error("Need to provide `options.treeSitterGrammarRoot`");
   if (options.treeSitterGrammarRoot === undefined)
     throw new Error("Need to provide `options.treeSitterGrammarRoot`");
   return function (tree) {
@@ -40,9 +39,7 @@ export default function rehypeTreeSitter(options) {
             if (highlightStack.length === 0) {
               node.children.push({ type: "text", value: sourceChunk });
             } else {
-              node.children.push(
-                h("span", { class: highlightStack.join(" ") }, sourceChunk)
-              );
+              node.children.push(h("span", { class: highlightStack.join(" ") }, sourceChunk));
             }
           } else if (event.highlightStart !== undefined) {
             highlightStack.push(event.highlightStart.highlightName);

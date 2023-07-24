@@ -49,31 +49,41 @@ fn driver<F: Fn(SerializableHighlightEvent)>(
             },
             ..Default::default()
         })
-        .map_err(|why| NjError::Other(format!("Failed to call `find_all_languages`: {}", &why)))?;
+        .map_err(|why| {
+            NjError::Other(format!(
+                "{}: Failed to call `find_all_languages`: {}",
+                root_scope, &why
+            ))
+        })?;
 
     let (language, language_configuration) = loader
         .language_configuration_for_scope(&root_scope)
         .map_err(|why| {
             NjError::Other(format!(
-                "Failed to call `language_configuration_for_scope`: {}",
-                &why
+                "{}: Failed to call `language_configuration_for_scope`: {}",
+                root_scope, &why
             ))
         })?
-        .ok_or(NjError::Other(String::from(
-            "Missing Language Configuration",
+        .ok_or(NjError::Other(format!(
+            "{}: Missing Language Configuration",
+            root_scope,
         )))?;
     let highlight_config = language_configuration
         .highlight_config(language)
         .map_err(|why| NjError::Other(format!("Failed to call `highlight_config`: {}", &why)))?
-        .ok_or(NjError::Other(String::from(
-            "Missing Highlight Configuration",
+        .ok_or(NjError::Other(format!(
+            "{}: Missing Highlight Configuration",
+            root_scope,
         )))?
         .clone();
     let mut highlighter = Highlighter::new();
     let mut highlight_iter = highlighter
         .highlight(highlight_config, source.as_bytes(), None, |_| None)
         .map_err(|why| {
-            NjError::Other(format!("Failed to get highlight event iterator: {}", &why))
+            NjError::Other(format!(
+                "{}: Failed to get highlight event iterator: {}",
+                root_scope, &why
+            ))
         })?;
 
     let highlight_names = loader.highlight_names();
