@@ -30,10 +30,16 @@ impl From<(tree_sitter_highlight::HighlightEvent, &[String])> for SerializableHi
 #[node_bindgen]
 fn driver<F: Fn(SerializableHighlightEvent)>(
     language_root_path: String,
-    root_scope: String,
+    raw_maybe_root_scope: String,
+    language_id: String,
     source: String,
     callback: F,
 ) -> Result<(), NjError> {
+    let maybe_root_scope = if raw_maybe_root_scope.is_empty() {
+        None
+    } else {
+        Some(raw_maybe_root_scope)
+    };
     let mut loader = tree_sitter_loader::Loader::new().map_err(|why| {
         NjError::Other(format!(
             "Failed to create `tree_sitter_loader::Loader`: {}",
@@ -52,28 +58,35 @@ fn driver<F: Fn(SerializableHighlightEvent)>(
         .map_err(|why| {
             NjError::Other(format!(
                 "{}: Failed to call `find_all_languages`: {}",
-                root_scope, &why
+                language_id, &why
             ))
         })?;
 
-    let (language, language_configuration) = loader
-        .language_configuration_for_scope(&root_scope)
+    let load_result = if let Some(root_scope) = maybe_root_scope {
+        loader.language_configuration_for_scope(&root_scope)
+    } else {
+        let file_name = format!("file.{}", &*language_id);
+        loader.language_configuration_for_file_name(std::path::Path::new(&*file_name))
+    };
+
+    let (language, language_configuration) = 
+        load_result
         .map_err(|why| {
             NjError::Other(format!(
-                "{}: Failed to call `language_configuration_for_scope`: {}",
-                root_scope, &why
+                "{}: Failed to call `language_configuration_for_scope` or `language_configuration_for_file_name`: {}",
+                language_id, &why
             ))
         })?
         .ok_or(NjError::Other(format!(
             "{}: Missing Language Configuration",
-            root_scope,
+            language_id,
         )))?;
     let highlight_config = language_configuration
         .highlight_config(language)
         .map_err(|why| NjError::Other(format!("Failed to call `highlight_config`: {}", &why)))?
         .ok_or(NjError::Other(format!(
             "{}: Missing Highlight Configuration",
-            root_scope,
+            language_id,
         )))?
         .clone();
     let mut highlighter = Highlighter::new();
@@ -82,7 +95,7 @@ fn driver<F: Fn(SerializableHighlightEvent)>(
         .map_err(|why| {
             NjError::Other(format!(
                 "{}: Failed to get highlight event iterator: {}",
-                root_scope, &why
+                language_id, &why
             ))
         })?;
 

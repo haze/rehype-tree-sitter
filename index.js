@@ -7,27 +7,29 @@ const require = createRequire(import.meta.url);
 const core = require("./dist/index.node");
 
 const exampleScopeMap = {
-  "language-javascript": "source.js",
-  "language-sh": "source.bash",
-  "language-xml": "source.xml",
+  javascript: "source.js",
+  sh: "source.bash",
+  xml: "source.xml",
 };
 
 const isCodeBlockElement = (node) => node.tagName === "code";
 export default function rehypeTreeSitter(options) {
-  if (options === undefined) throw new Error("Need to provide `options.treeSitterGrammarRoot`");
+  if (options === undefined)
+    throw new Error("Need to provide `options.treeSitterGrammarRoot`");
   if (options.treeSitterGrammarRoot === undefined)
     throw new Error("Need to provide `options.treeSitterGrammarRoot`");
   return function (tree) {
     visit(tree, isCodeBlockElement, (node, index, parent) => {
       if (Object.keys(node.properties).length === 0) return;
       const code = node.children[0].value;
-      const language = node.properties.className[0];
-      if (!(language in (options.scopeMap || exampleScopeMap))) return;
+      const inputLanguage = node.properties.className[0];
       node.children = [];
       const highlightStack = [];
+      const language = inputLanguage.split("-")[1];
       core.driver(
         options.treeSitterGrammarRoot,
-        (options.scopeMap || exampleScopeMap)[language],
+        (options.scopeMap || exampleScopeMap)[language] ?? "",
+        language,
         code,
         (event) => {
           if (event.source !== undefined) {
@@ -39,7 +41,9 @@ export default function rehypeTreeSitter(options) {
             if (highlightStack.length === 0) {
               node.children.push({ type: "text", value: sourceChunk });
             } else {
-              node.children.push(h("span", { class: highlightStack.join(" ") }, sourceChunk));
+              node.children.push(
+                h("span", { class: highlightStack.join(" ") }, sourceChunk)
+              );
             }
           } else if (event.highlightStart !== undefined) {
             highlightStack.push(event.highlightStart.highlightName);
