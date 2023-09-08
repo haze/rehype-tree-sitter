@@ -2,14 +2,16 @@
 name = "rehype-tree-sitter"
 version = "0.1.0"
 edition = "2021"
+exclude = ["index.node"]
 
 [lib]
 crate-type = ["cdylib"]
 
 [dependencies]
-node-bindgen = "5.1"
 tree-sitter-highlight = "0.20.1"
 tree-sitter-loader = "0.20.0"
 
-[build-dependencies]
-node-bindgen = {version="5.1", features=["build"]}
+[dependencies.neon]
+version = "0.10"
+default-features = false
+features = ["napi-6"]
