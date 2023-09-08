@@ -101,7 +101,9 @@ fn driver(mut cx: FunctionContext) -> JsResult<JsUndefined> {
                 event_object.set(&mut cx, "highlightStart", internal_object)?;
                 call_attempt.arg(event_object)
             }
-            tree_sitter_highlight::HighlightEvent::HighlightEnd => &mut call_attempt,
+            tree_sitter_highlight::HighlightEvent::HighlightEnd => {
+                call_attempt.arg(cx.string("HighlightEnd"))
+            }
         };
         call_attempt.apply::<JsUndefined, CallContext<'_, JsObject>>(&mut cx)?;
     }
