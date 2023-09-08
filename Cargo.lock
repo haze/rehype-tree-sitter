@@ -245,7 +245,6 @@ name = "rehype-tree-sitter"
 version = "0.1.0"
 dependencies = [
  "neon",
- "serde",
  "tree-sitter-highlight",
  "tree-sitter-loader",
 ]

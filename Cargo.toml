@@ -10,7 +10,6 @@ crate-type = ["cdylib"]
 [dependencies]
 tree-sitter-highlight = "0.20.1"
 tree-sitter-loader = "0.20.0"
-serde = { version = "1.0.188", features = ["derive"] }
 
 [dependencies.neon]
 version = "0.10"
