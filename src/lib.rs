@@ -1,7 +1,5 @@
 use std::path::PathBuf;
-
 use neon::prelude::*;
-
 use tree_sitter_highlight::Highlighter;
 
 fn driver(mut cx: FunctionContext) -> JsResult<JsUndefined> {
