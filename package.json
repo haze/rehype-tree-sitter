@@ -8,12 +8,12 @@
     "test": "node --experimental-vm-modules ./node_modules/.bin/jest",
     "create-dist-folder": "mkdir -p dist",
     "copy-macos-aarch64-artifact": "npm run create-dist-folder && cp target/aarch64-apple-darwin/release/librehype_tree_sitter.dylib dist/aarch64-apple-darwin.node",
-    "build-macos-aarch64": "cargo build --target=aarch64-apple-darwin --release && npm run copy-macos-aarch64-artifact",
+    "build-macos-aarch64": "cargo zigbuild --target=aarch64-apple-darwin --release && npm run copy-macos-aarch64-artifact",
     "copy-macos-x86-artifact": "npm run create-dist-folder && cp target/x86_64-apple-darwin/release/librehype_tree_sitter.dylib dist/x86_64-apple-darwin.node",
-    "build-macos-x86": "cargo build --target=x86_64-apple-darwin --release && npm run copy-macos-x86-artifact",
-    "copy-linux-x86-artifact": "npm run create-dist-folder && cp target/x86_64-unknown-linux-gnu/release/librehype_tree_sitter.so dist/x86_64-unknown-linux-gnu.node",
-    "build-linux-x86": "cargo build --target=x86_64-unknown-linux-gnu --release && npm run copy-linux-x86-artifact",
-    "build-all": "npm run build-macos-aarch64 && npm run build-macos-x86 && npm run build-linux-x86",
+    "build-macos-x86": "cargo zigbuild --target=x86_64-apple-darwin --release && npm run copy-macos-x86-artifact",
+    "copy-linux-x86-gnu-artifact": "npm run create-dist-folder && cp target/x86_64-unknown-linux-gnu/release/librehype_tree_sitter.so dist/x86_64-unknown-linux-gnu.node",
+    "build-linux-x86-gnu": "cargo zigbuild --target=x86_64-unknown-linux-gnu --release && npm run copy-linux-x86-gnu-artifact",
+    "build-all": "npm run build-macos-aarch64 && npm run build-macos-x86 && npm run build-linux-x86-gnu",
     "install": "node install.js"
   },
   "repository": {
