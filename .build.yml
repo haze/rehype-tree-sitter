@@ -2,9 +2,8 @@ image: alpine/edge
 packages:
   - nodejs
   - npm
-  - cargo
 sources:
-  - https://github.com/haze/rehype-tree-sitter#hb/neon
+  - https://github.com/haze/rehype-tree-sitter
 tasks:
   - install: |
       cd rehype-tree-sitter
