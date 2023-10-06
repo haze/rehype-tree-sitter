@@ -2,17 +2,11 @@ import { visit, SKIP } from "unist-util-visit";
 import { rehype } from "rehype";
 import { createRequire } from "node:module";
 import { h } from "hastscript";
-import os from 'node:os';
+import { getBinaryPath } from './install.js';
 import stringByteSlice from "string-byte-slice";
 const require = createRequire(import.meta.url);
 
-const lookup = {
-    "darwin-x64": "./dist/x86_64-apple-darwin.node",
-    "linux-x64": "./dist/x86_64-unknown-linux-gnu.node",
-    "darwin-arm64": "./dist/aarch64-apple-darwin.node",
-}
-
-const core = require(lookup[`${os.platform()}-${os.arch()}`] ?? "./dist/index.node");
+const core = require(getBinaryPath());
 
 const exampleScopeMap = {
     javascript: "source.js",
