@@ -2,7 +2,7 @@ import { visit, SKIP } from "unist-util-visit";
 import { rehype } from "rehype";
 import { createRequire } from "node:module";
 import { h } from "hastscript";
-import { getBinaryPath } from './install.js';
+import { getBinaryPath } from './prebuilt.js';
 import stringByteSlice from "string-byte-slice";
 const require = createRequire(import.meta.url);
 

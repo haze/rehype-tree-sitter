@@ -1,19 +1,5 @@
-import os from "node:os";
 import { exec } from "node:child_process";
-
-const lookup = {
-    "darwin-x64": "./dist/x86_64-apple-darwin.node",
-    "linux-x64": "./dist/x86_64-unknown-linux-gnu.node",
-    "darwin-arm64": "./dist/aarch64-apple-darwin.node",
-}
-
-export function getBinaryPath() {
-    return lookup[`${os.platform()}-${os.arch()}`] ?? "./dist/index.node";
-}
-
-export function hasPrebuiltBinary() {
-    return lookup[`${os.platform()}-${os.arch()}`] !== undefined;
-}
+import { hasPrebuiltBinary } from './prebuilt.js';
 
 if (!hasPrebuiltBinary()) {
     console.log("Building library for native platform...");
@@ -23,7 +9,3 @@ if (!hasPrebuiltBinary()) {
 } else {
     console.log(`Skipping cargo build, prebuilt binary is available (platform=${os.platform()}, architecture=${os.arch()})`);
 }
-
-
-
-
