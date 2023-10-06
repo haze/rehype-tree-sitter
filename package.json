@@ -6,10 +6,15 @@
   "exports": "./index.js",
   "scripts": {
     "test": "node --experimental-vm-modules ./node_modules/.bin/jest",
-    "build": "cargo-cp-artifact -nc dist/index.node -- cargo build --message-format=json-render-diagnostics",
-    "build-debug": "npm run build --",
-    "build-release": "npm run build -- --release",
-    "install": "npm run build-release"
+    "create-dist-folder": "mkdir -p dist",
+    "copy-macos-aarch64-artifact": "npm run create-dist-folder && cp target/aarch64-apple-darwin/release/librehype_tree_sitter.dylib dist/aarch64-apple-darwin.node",
+    "build-macos-aarch64": "cargo build --target=aarch64-apple-darwin --release && npm run copy-macos-aarch64-artifact",
+    "copy-macos-x86-artifact": "npm run create-dist-folder && cp target/x86_64-apple-darwin/release/librehype_tree_sitter.dylib dist/x86_64-apple-darwin.node",
+    "build-macos-x86": "cargo build --target=x86_64-apple-darwin --release && npm run copy-macos-x86-artifact",
+    "copy-linux-x86-artifact": "npm run create-dist-folder && cp target/x86_64-unknown-linux-gnu/release/librehype_tree_sitter.so dist/x86_64-unknown-linux-gnu.node",
+    "build-linux-x86": "cargo build --target=x86_64-unknown-linux-gnu --release && npm run copy-linux-x86-artifact",
+    "build-all": "npm run build-macos-aarch64 && npm run build-macos-x86 && npm run build-linux-x86",
+    "install": "cargo build --release && mkdir -p dist && find target/release -maxdepth 1 -type f -name \"librehype_tree_sitter*\" ! -name \"*.d\" -exec cp {} dist/index.node \\;"
   },
   "repository": {
     "type": "git",
