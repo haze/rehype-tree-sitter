@@ -6,6 +6,4 @@ if (!hasPrebuiltBinary()) {
     const buildProcess = exec("cargo build --release && mkdir -p dist && find target/release -maxdepth 1 -type f -name \"librehype_tree_sitter*\" ! -name \"*.d\" -exec cp {} dist/index.node \\;");
     buildProcess.stdout.pipe(process.stdout);
     buildProcess.stderr.pipe(process.stderr);
-} else {
-    console.log(`Skipping cargo build, prebuilt binary is available (platform=${os.platform()}, architecture=${os.arch()})`);
 }
