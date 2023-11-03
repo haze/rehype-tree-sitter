@@ -3,6 +3,7 @@ import os from "node:os";
 const lookup = {
     "darwin-x64": "./dist/x86_64-apple-darwin.node",
     "linux-x64": "./dist/x86_64-unknown-linux-gnu.node",
+    "linux-arm64": "./dist/aarch64-unknown-linux-gnu.node",
     "darwin-arm64": "./dist/aarch64-apple-darwin.node",
 }
 
