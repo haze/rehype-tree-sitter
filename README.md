@@ -6,17 +6,17 @@
 
 ## Contents
 
-*   [What is this?](#what-is-this)
-*   [When should I use this?](#when-should-i-use-this)
-*   [Install](#install)
-*   [Use](#use)
-*   [API](#api)
-    *   [`unified().use(rehypeTreeSitter[, options])`](#unifieduserehypetreesitter-options)
-*   [Types](#types)
-*   [Compatibility](#compatibility)
-*   [Security](#security)
-*   [Contribute](#contribute)
-*   [License](#license)
+- [What is this?](#what-is-this)
+- [When should I use this?](#when-should-i-use-this)
+- [Install](#install)
+- [Use](#use)
+- [API](#api)
+  - [`unified().use(rehypeTreeSitter[, options])`](#unifieduserehypetreesitter-options)
+- [Types](#types)
+- [Compatibility](#compatibility)
+- [Security](#security)
+- [Contribute](#contribute)
+- [License](#license)
 
 ## What is this?
 
@@ -34,7 +34,7 @@ This is a rehype plugin that highlights code using tree-sitter.
 ## When should I use this?
 
 This plugin is useful when you want a more sophisticated highlighting experience
-than what TextMate grammars provide. 
+than what TextMate grammars provide.
 
 This plugin is built on [`hastscript`][hastscript], which does the work on
 syntax trees.
@@ -51,7 +51,6 @@ npm install rehype-tree-sitter
 ```
 
 ## Use
-
 
 ### TODO
 
@@ -99,25 +98,14 @@ audit them to make sure the code is safe to run. Other than that, the plugin is 
 <!-- Definitions -->
 
 [build-badge]: https://github.com/rehypejs/rehype-raw/workflows/main/badge.svg
-
 [build]: https://github.com/rehypejs/rehype-raw/actions
-
 [npm]: https://docs.npmjs.com/cli/install
-
 [license]: LICENSE
-
 [author]: https://haz.ee
-
 [typescript]: https://www.typescriptlang.org
-
 [unified]: https://github.com/unifiedjs/unified
-
 [hastscript]: https://github.com/syntax-tree/hastscript
-
 [rehype]: https://github.com/rehypejs/rehype
-
 [hast]: https://github.com/syntax-tree/hast
-
 [hast-util-raw]: https://github.com/syntax-tree/hast-util-raw
-
 [parse5]: https://github.com/inikulin/parse5

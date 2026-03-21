@@ -5,31 +5,53 @@
       url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixpkgs.url = "github:nixos/nixpkgs";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
   };
 
-  outputs = { self, fenix, nixpkgs }:
+  outputs =
+    {
+      self,
+      fenix,
+      nixpkgs,
+    }:
     let
-      pkgs = nixpkgs.legacyPackages.aarch64-darwin;
-      rust = 
-        with fenix.packages.aarch64-darwin; combine [
-          stable.rustc
-          stable.cargo
-          targets.aarch64-unknown-linux-gnu.stable.rust-std
-          targets.x86_64-unknown-linux-gnu.stable.rust-std
-          targets.aarch64-apple-darwin.stable.rust-std
-          targets.x86_64-apple-darwin.stable.rust-std
-        ];
-    in {
-      devShell.aarch64-darwin =
-        pkgs.mkShell {
-          buildInputs = [
-            pkgs.nodejs_20
-            pkgs.tree-sitter
-            pkgs.libiconvReal
-            pkgs.cargo-zigbuild
-            rust
-          ];
-        };
+      forAllSystems = nixpkgs.lib.genAttrs [
+        "aarch64-darwin"
+        "x86_64-darwin"
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
+    in
+    {
+      devShells = forAllSystems (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+          rust =
+            with fenix.packages.${system};
+            combine [
+              stable.rustc
+              stable.cargo
+              targets.aarch64-unknown-linux-gnu.stable.rust-std
+              targets.x86_64-unknown-linux-gnu.stable.rust-std
+              targets.aarch64-apple-darwin.stable.rust-std
+              targets.x86_64-apple-darwin.stable.rust-std
+            ];
+        in
+        {
+          default = pkgs.mkShell {
+            buildInputs = [
+              pkgs.nodejs_22
+              pkgs.tree-sitter
+              pkgs.cargo-zigbuild
+              pkgs.oxlint
+              rust
+            ]
+            ++ pkgs.lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
+              pkgs.libiconv
+            ];
+          };
+        }
+      );
     };
 }

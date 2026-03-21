@@ -25,11 +25,7 @@ fn driver(mut cx: FunctionContext) -> JsResult<JsUndefined> {
     };
 
     if let Err(why) = loader.find_all_languages(&tree_sitter_loader::Config {
-        parser_directories: {
-            let mut vec = Vec::new();
-            vec.push(PathBuf::from(language_root_path));
-            vec
-        },
+        parser_directories: vec![PathBuf::from(language_root_path)],
         ..Default::default()
     }) {
         return cx.throw_error(format!(
@@ -56,7 +52,7 @@ fn driver(mut cx: FunctionContext) -> JsResult<JsUndefined> {
             language_id, &why
         )),
     };
-    let highlight_config = match language_configuration.highlight_config(language) {
+    let highlight_config = match language_configuration.highlight_config(language, None) {
         Ok(Some(config)) => config,
         Ok(None) => {
             return cx.throw_error(format!("{}: Missing Highlight Configuration", language_id,))
@@ -64,7 +60,7 @@ fn driver(mut cx: FunctionContext) -> JsResult<JsUndefined> {
         Err(why) => return cx.throw_error(format!("Failed to call `highlight_config`: {}", &why)),
     };
     let mut highlighter = Highlighter::new();
-    let mut highlight_iter =
+    let highlight_iter =
         match highlighter.highlight(highlight_config, source.as_bytes(), None, |_| None) {
             Ok(iter) => iter,
             Err(why) => {
@@ -76,10 +72,19 @@ fn driver(mut cx: FunctionContext) -> JsResult<JsUndefined> {
         };
 
     let highlight_names = loader.highlight_names();
+    let this = cx.undefined();
 
-    while let Some(Ok(event)) = highlight_iter.next() {
-        let mut call_attempt = callback.call_with(&mut cx);
-        let call_attempt = match event {
+    for event in highlight_iter {
+        let event = match event {
+            Ok(event) => event,
+            Err(why) => {
+                return cx.throw_error(format!(
+                    "{}: Error during highlighting: {}",
+                    language_id, &why
+                ))
+            }
+        };
+        let arg: Handle<JsValue> = match event {
             tree_sitter_highlight::HighlightEvent::Source { start, end } => {
                 let event_object = cx.empty_object();
                 let internal_object = cx.empty_object();
@@ -88,7 +93,7 @@ fn driver(mut cx: FunctionContext) -> JsResult<JsUndefined> {
                 let end_number = cx.number(end as u32);
                 internal_object.set(&mut cx, "end", end_number)?;
                 event_object.set(&mut cx, "source", internal_object)?;
-                call_attempt.arg(event_object)
+                event_object.upcast()
             }
             tree_sitter_highlight::HighlightEvent::HighlightStart(group_index) => {
                 let highlight_name = &highlight_names[group_index.0];
@@ -97,13 +102,13 @@ fn driver(mut cx: FunctionContext) -> JsResult<JsUndefined> {
                 let highlight_name_string = cx.string(highlight_name);
                 internal_object.set(&mut cx, "highlightName", highlight_name_string)?;
                 event_object.set(&mut cx, "highlightStart", internal_object)?;
-                call_attempt.arg(event_object)
+                event_object.upcast()
             }
             tree_sitter_highlight::HighlightEvent::HighlightEnd => {
-                call_attempt.arg(cx.string("HighlightEnd"))
+                cx.string("HighlightEnd").upcast()
             }
         };
-        call_attempt.apply::<JsUndefined, CallContext<'_, JsObject>>(&mut cx)?;
+        callback.call(&mut cx, this, &[arg])?;
     }
 
     Ok(cx.undefined())
