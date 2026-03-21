@@ -1,0 +1,4 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nicolo-ribaudo/oxfmt/main/npm/oxfmt/configuration_schema.json",
+  "ignore": ["tests/tree-sitter-javascript/**", "dist/**"]
+}
